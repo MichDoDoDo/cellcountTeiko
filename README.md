@@ -1,1 +1,5 @@
 # cellcountTeiko
+
+
+# steps:
+## get wsl
