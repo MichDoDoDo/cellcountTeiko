@@ -18,7 +18,19 @@ def main():
                 dbPath = "cell_store.db"
                 db = CellDataRepo(dbPath)
                 dataPath = "cell_data/cell-count.csv"
-                db.load_data(dataPath)
+                db.LoadData(dataPath)
+                print("1 to add")
+                print("2 to remove")
+                choice = input()
+                if(choice == "1"):
+                    dataPath = "cell_data/additionalCellData.csv"
+                    db.AddData(dataPath)
+                elif(choice == "2"):
+                    print("what sample ID")
+                    sample_id = input()
+                    db.RemoveData(sample_id)
+                else:
+                    flag = False
                 continue 
             case "2":
                 flag = False

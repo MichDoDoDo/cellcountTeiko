@@ -1,0 +1,2 @@
+project,subject,condition,age,sex,treatment,response,sample,sample_type,time_from_treatment_start,b_cell,cd8_t_cell,cd4_t_cell,nk_cell,monocyte
+prj1,sbj000,melanoma,58,M,miraclib,no,sample10500,PBMC,0,10908,24440,20491,13864,23511

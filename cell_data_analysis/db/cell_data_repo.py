@@ -1,30 +1,26 @@
 import sqlite3 
 from src.db_controller import DBController
+from src.database import InitDB, InitSampleData, InitFrqDB
 
 class CellDataRepo:
     
     def __init__(self, db_path):
         self.conn = sqlite3.connect(db_path)
-        self.init_db()
+        self.dbcon = DBController()
+        InitDB(self.conn)
 
-    def load_data(self, path):
-        DBController.load_data_to_db(path, self.conn)
+    def LoadData(self, path):
+        InitSampleData(self.conn)
+        InitFrqDB(self.conn)
+        self.dbcon.LoadDataToDB(path, self.conn)
+        self.dbcon.LoadFrqData(self.conn)
 
-    def init_db (self):
-        dbcon = self.conn.cursor()
-        dbcon.execute('''
-        CREATE TABLE IF NOT EXISTS samples (
-            sample_id TEXT PRIMARY KEY,
-            indication TEXT,
-            treatment TEXT,
-            time_from_treatment_start INTEGER,
-            response TEXT,
-            gender TEXT,
-            b_cell INTEGER,
-            cd8_t_cell INTEGER,
-            cd4_t_cell INTEGER,
-            nk_cell INTEGER,
-            monocyte INTEGER)''')
-        self.conn.commit()
+    def AddData(self, path):
+        self.dbcon.AddDataToDB(path, self.conn)
+        
+    def RemoveData(self, sample_Id):
+        DBController.RemoveSampleFromDB(sample_Id, self.conn)
+        print(f"removed {sample_Id} from db")
+        
     
     #todo: add analysis
