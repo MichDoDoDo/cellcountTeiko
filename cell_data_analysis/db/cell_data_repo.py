@@ -16,11 +16,12 @@ class CellDataRepo:
         self.dbcon.LoadFrqData(self.conn)
 
     def AddData(self, path):
-        self.dbcon.AddDataToDB(path, self.conn)
+        return self.dbcon.AddDataToDB(path, self.conn)
         
-    def RemoveData(self, sample_Id):
-        DBController.RemoveSampleFromDB(sample_Id, self.conn)
-        print(f"removed {sample_Id} from db")
+    def RemoveData(self, sampleId):
+        if(self.dbcon.RemoveSampleFromDB(sampleId, self.conn)):
+            print(f"removed {sampleId} from db")
+            return True
+        return False
         
     
-    #todo: add analysis

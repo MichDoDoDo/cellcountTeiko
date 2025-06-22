@@ -18,7 +18,7 @@ class DBController:
             samples_df.to_sql('samples', conn, if_exists='replace', index=False)
             
             cellDataRows = []
-            for index, row in df.iterrows():
+            for _, row in df.iterrows():
                 for cell_type in cellColumns:
                     cellDataRows.append({
                         "samples" : row['sample'],
@@ -55,19 +55,30 @@ class DBController:
         frq_df = pd.DataFrame(frqList)
         frq_df.to_sql('frequencies', conn, if_exists='replace', index=False)
         conn.commit()
+    
             
     def AddDataToDB(self, csvPath, conn):
         df = pd.read_csv(csvPath)
         try:
-            sample_columns = [
+            sampleColumns = [
                 'project', 'subject', 'condition', 'age', 'sex',
                 'treatment', 'response', 'sample', 'sample_type', 'time_from_treatment_start'
             ]
 
             cellColumns = ['b_cell', 'cd8_t_cell', 'cd4_t_cell', 'nk_cell', 'monocyte']
 
-            samples_df = df[sample_columns]
-            samples_df.to_sql('samples', conn, if_exists='append', index=False)
+            samplesDf = df[sampleColumns]
+            
+            existingSamplesQuery = "SELECT sample FROM samples"
+            existingSamplesDf = pd.read_sql_query(existingSamplesQuery, conn)
+            existingSamples = set(existingSamplesDf['sample'])
+            
+            newSamples = set(samplesDf['sample'])
+            if not newSamples.isdisjoint(existingSamples):
+                print("Error, duplicate sample value found. Aborting data insertion.")
+                return False
+
+            samplesDf.to_sql('samples', conn, if_exists='append', index=False)
             
             cellDataRows = []
             for index, row in df.iterrows():
@@ -99,18 +110,20 @@ class DBController:
                         "percentage": (row["count"] / total) * 100
                     })
 
-            frq_df = pd.DataFrame(frqList)
-            frq_df.to_sql('frequencies', conn, if_exists='append', index=False)
+            frqDf = pd.DataFrame(frqList)
+            frqDf.to_sql('frequencies', conn, if_exists='append', index=False)
             conn.commit()
-            
+            return True
         except Exception as ex:
             print(f"Error loading data. EX: {ex}")
-        
     
-    def RemoveSampleFromDB(sample_Id, conn):
+    
+    def RemoveSampleFromDB(self,sampleId, conn):
         try:
-            conn.execute("DELETE FROM samples WHERE sample = ?", (sample_Id,))
+            conn.execute("DELETE FROM samples WHERE sample = ?", (sampleId,))
             conn.commit()
+            return True
         except Exception as ex:
-            print(f"error deleting sample {sample_Id} from database. Ex:{ex}")
+            print(f"error deleting sample {sampleId} from database. Ex:{ex}")
+        return False
         

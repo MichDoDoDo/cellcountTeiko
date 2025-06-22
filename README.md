@@ -22,3 +22,4 @@
 2. how will they be able to open the app
 3. will there be a gui
 4. will the gui have an option to select / import csv
+5. pygui vs tinker

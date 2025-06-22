@@ -13,7 +13,7 @@ def InitDB(conn):
         sex TEXT,
         treatment TEXT,
         response TEXT,
-        sample TEXT,
+        sample TEXT UNIQUE,
         sample_type TEXT,
         time_from_treatment_start INTEGER
     )
@@ -49,3 +49,4 @@ def InitFrqDB(conn):
     )
     """)
     conn.commit()
+    
