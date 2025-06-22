@@ -1,7 +1,6 @@
 # cellcountTeiko
 
-**Test Project.
-
+Test Project
 ---
 
 ## Getting Started
@@ -26,6 +25,8 @@ pip install -r requirements.txt
    
 
 ## Database Design
+The database is designed with normalization in mind, separating metadata (samples) from measurements (cellCounts and frequencies). This avoids data redundancy and makes it easier to manage, query, and extend. Using foreign keys ensures referential integrity between related tables.
+
 ### Sample Table
 | Column                      | Type    | Description                     |
 | --------------------------- | ------- | ------------------------------- |
@@ -76,4 +77,9 @@ cellcountTeiko/
     - database.py
     - data_report.py
     - db_controller.py
-    
+
+## Future Improvements
+This project is currently at the MVP (Minimum Viable Product) stage. While it supports all core functionality,including data import, analysis, and reporting. Several enhancements are planned to improve performance, scalability, and user experience
+- Add Caching Layer: To improve performance, especially with large datasets, a caching layer using technologies like Redis is planned. This will allow faster access to frequently used or computed data (e.g., summary stats, query results), reducing database load.
+- Improve UI/UX: The current interface is functional but minimal. Future updates will focus on making the GUI more intuitive and user-friendly — with features like better navigation, filtering options, embedded plots, and real-time feedback.
+- Asynchronous Processing: Long-running tasks like statistical analysis or batch imports will be moved to background threads or async workflows to keep the UI responsive.
