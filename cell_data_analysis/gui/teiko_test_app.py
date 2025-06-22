@@ -15,8 +15,6 @@ class App(tk.Tk):
         
         self.container = tk.Frame(self)
         self.container.grid(row=0, column=0, sticky="nsew")
-        self.gridRowconfigure(0, weight=1)
-        self.gridColumnconfigure(0, weight=1)
 
 
         self.views = {}
